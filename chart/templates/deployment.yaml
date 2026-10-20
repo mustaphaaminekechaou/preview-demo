@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: preview-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: preview-demo
+  template:
+    metadata:
+      labels:
+        app: preview-demo
+    spec:
+      containers:
+        - name: preview-demo
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 8080

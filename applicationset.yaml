@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: preview-demo
+  namespace: argocd
+spec:
+  generators:
+    - pullRequest:
+        github:
+          owner: mustaphaaminekechaou
+          repo: preview-demo
+          tokenRef:
+            secretName: github-token
+            key: token
+        requeueAfterSeconds: 60
+  template:
+    metadata:
+      name: 'preview-pr-{{number}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/mustaphaaminekechaou/preview-demo
+        targetRevision: '{{head_sha}}'
+        path: chart
+        helm:
+          parameters:
+            - name: image.tag
+              value: 'pr-{{number}}'
+            - name: ingress.host
+              value: 'pr-{{number}}.localtest.me'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: 'pr-{{number}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
