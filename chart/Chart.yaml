@@ -1,0 +1,4 @@
+apiVersion: v2
+name: preview-demo
+description: Chart pour les environnements de preview par PR
+version: 0.1.0
