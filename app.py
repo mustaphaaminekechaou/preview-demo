@@ -4,7 +4,7 @@ from flask import Flask
 app = Flask(__name__)
 
 VERSION = os.getenv("APP_VERSION", "dev")
-TITLE_COLOR = "red"
+TITLE_COLOR = "green"
 
 
 @app.route("/")
